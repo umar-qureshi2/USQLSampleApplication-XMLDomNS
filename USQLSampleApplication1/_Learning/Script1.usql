@@ -1,0 +1,1315 @@
+﻿//CREATE ASSEMBLY USQLCSharpProject1 FROM @"C:\Users\umar.qureshi\Documents\Visual Studio 2015\Projects\USQLSampleApplication1\USQLCSharpProject1\bin\Debug\USQLCSharpProject1.dll";
+REFERENCE ASSEMBLY [USQLCSharpProject1];
+//
+//@e =
+//    EXTRACT a string,
+//            b string,
+//            c string
+//    FROM @"C:\excel\example.xml"
+//    USING new USQLCSharpProject1.XmlDomExtractor(rowPath : "foo",
+//          columnPaths : new SQL.MAP<string, string>{ {"zoo/bar", "a"},{"zoo/bar/@flav", "c"}, {"baz", "b"} });
+////@q =
+////    SELECT *,
+////           "<root><row><qux>1.01</qux></row><row><qux>1.001</qux></row></root>" AS x
+////    FROM @e;
+//
+////@q =
+////    SELECT @q.a,
+////           @q.b,
+////           t.c
+////    FROM @q
+////         CROSS APPLY
+////             new Microsoft.Analytics.Samples.Formats.Xml.XmlApplier("x",
+////             "row",
+////             new SQL.MAP<string, string>{ {"qux", "c"} }) AS t(c string);
+//OUTPUT @e
+//TO @"C:\excel\foo.xml"
+//USING new USQLCSharpProject1.XmlOutputter("foo");
+
+//@e = EXTRACT a string
+// FROM @"C:\excel\file.xml"
+// USING new USQLCSharpProject1.XmlDomExtractor(rowPath:"/x:lics/x:rec",
+//                         columnPaths:new SQL.MAP<string, string> { {"@sTime", "a"} });
+//
+//OUTPUT @e TO @"C:\excel\output.csv" USING Outputters.Csv(quoting:false);
+
+//////
+//////@e =
+//////    EXTRACT a string,
+//////            b string
+//////    FROM @"C:\excel\1001464881_1001464795_2016-01-13_10.00.01.689__1900.xml"
+//////    USING new USQLCSharpProject1.XmlDomExtractorNs(
+//////          rowPath : "lics:rec",
+//////          columnPaths : new SQL.MAP<string, string>{ {"lics:ftrs/lics:ftr/@id", "a"},{"lics:ftrs","b"} },
+//////          namespaces : "lics=http://bentley.com/selectserver/webservices/"
+//////          );
+//////
+//////OUTPUT @e
+//////TO @"C:\excel\output.csv"
+//////USING Outputters.Csv(quoting : false);
+
+//////////@e =
+//////////    EXTRACT a string,
+//////////            b string
+//////////    FROM @"C:\excel\1001464881_1001464795_2016-01-13_10.00.01.689__1900.xml"
+//////////    USING new USQLCSharpProject1.XmlDomExtractorNs(
+//////////                                                      
+//////////          rowPath : "root:lics/root:rec/root:ftrs/root:ftr/root:uds/root:ud",
+//////////          columnPaths : new SQL.MAP<string, string>{ {"../../@id", "a"} },
+//////////          namespaces : "root=http://bentley.com/selectserver/webservices/"
+//////////          );
+//////////
+//////////OUTPUT @e
+//////////TO @"C:\excel\output.csv"
+//////////USING Outputters.Csv(quoting : false);
+
+
+@e =
+    EXTRACT a string,
+            b string
+    FROM @"C:\excel\1001464881_1001464795_2016-01-13_10.00.01.689__1900.xml"
+    USING new USQLCSharpProject1.XmlDomExtractorNs(
+                                                      
+          rowPath : "root:lics/*",
+          columnPaths : new SQL.MAP<string, string>{ {"@id", "a"} },
+          namespaces : "root=http://bentley.com/selectserver/webservices/"
+          );
+
+OUTPUT @e
+TO @"C:\excel\output.csv"
+USING Outputters.Csv(quoting : false);
+
+/*
+<lics lVer="2.0" pID="1900" aKey="165J322M8FLC8SF" cTime="2016-01-13T10:00" gDel="0" country="US" fStr="">
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:26-00:00" eTime="2016-01-12T14:42:26-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:26-00:00" fst="" fet="" ret="2016-01-12T14:41:26.323" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:27-00:00" eTime="2016-01-12T14:42:27-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:27-00:00" fst="" fet="" ret="2016-01-12T14:41:27.196" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:27-00:00" eTime="2016-01-12T14:42:27-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:27-00:00" fst="" fet="" ret="2016-01-12T14:41:27.231" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:27-00:00" eTime="2016-01-12T14:42:27-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:27-00:00" fst="" fet="" ret="2016-01-12T14:41:27.302" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:27-00:00" eTime="2016-01-12T14:42:27-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:27-00:00" fst="" fet="" ret="2016-01-12T14:41:27.331" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:28-00:00" eTime="2016-01-12T14:42:28-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:28-00:00" fst="" fet="" ret="2016-01-12T14:41:28.201" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:28-00:00" eTime="2016-01-12T14:42:28-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:28-00:00" fst="" fet="" ret="2016-01-12T14:41:28.233" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:28-00:00" eTime="2016-01-12T14:42:28-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:28-00:00" fst="" fet="" ret="2016-01-12T14:41:28.307" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:28-00:00" eTime="2016-01-12T14:42:28-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:28-00:00" fst="" fet="" ret="2016-01-12T14:41:28.337" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:29-00:00" eTime="2016-01-12T14:42:29-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:29-00:00" fst="" fet="" ret="2016-01-12T14:41:29.281" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:29-00:00" eTime="2016-01-12T14:42:29-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:29-00:00" fst="" fet="" ret="2016-01-12T14:41:29.395" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:29-00:00" eTime="2016-01-12T14:42:29-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:29-00:00" fst="" fet="" ret="2016-01-12T14:41:29.722" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:29-00:00" eTime="2016-01-12T14:42:29-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:29-00:00" fst="" fet="" ret="2016-01-12T14:41:29.817" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:30-00:00" eTime="2016-01-12T14:42:30-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:30-00:00" fst="" fet="" ret="2016-01-12T14:41:30.234" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:30-00:00" eTime="2016-01-12T14:42:30-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:30-00:00" fst="" fet="" ret="2016-01-12T14:41:30.300" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:30-00:00" eTime="2016-01-12T14:42:30-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:30-00:00" fst="" fet="" ret="2016-01-12T14:41:30.622" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:30-00:00" eTime="2016-01-12T14:42:30-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:30-00:00" fst="" fet="" ret="2016-01-12T14:41:30.733" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:31-00:00" eTime="2016-01-12T14:42:31-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:31-00:00" fst="" fet="" ret="2016-01-12T14:41:31.204" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:31-00:00" eTime="2016-01-12T14:42:31-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:31-00:00" fst="" fet="" ret="2016-01-12T14:41:31.310" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:31-00:00" eTime="2016-01-12T14:42:31-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:31-00:00" fst="" fet="" ret="2016-01-12T14:41:31.631" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:31-00:00" eTime="2016-01-12T14:42:31-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:31-00:00" fst="" fet="" ret="2016-01-12T14:41:31.743" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:32-00:00" eTime="2016-01-12T14:42:32-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:32-00:00" fst="" fet="" ret="2016-01-12T14:41:32.278" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:32-00:00" eTime="2016-01-12T14:42:32-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:32-00:00" fst="" fet="" ret="2016-01-12T14:41:32.437" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:32-00:00" eTime="2016-01-12T14:42:32-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:32-00:00" fst="" fet="" ret="2016-01-12T14:41:32.712" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:41:32-00:00" eTime="2016-01-12T14:42:32-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:41:32-00:00" fst="" fet="" ret="2016-01-12T14:41:32.806" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="HOLAG6049LONL" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="ARS_MERGE_STAGING/ADMIN" uSID="kxG0/7IzoI65mplpZZ6uCyNZ1sA=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:03-00:00" eTime="2016-01-12T14:43:03-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:03-00:00" fst="" fet="" ret="2016-01-12T14:42:03.036" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:03-00:00" fst="" fet="" ret="2016-01-12T14:42:03.134" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:03-00:00" fst="" fet="" ret="2016-01-12T14:42:03.550" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:03-00:00" fst="" fet="" ret="2016-01-12T14:42:03.713" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:04-00:00" fst="" fet="" ret="2016-01-12T14:42:04.119" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:04-00:00" fst="" fet="" ret="2016-01-12T14:42:04.638" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:05-00:00" fst="" fet="" ret="2016-01-12T14:42:05.094" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:05-00:00" fst="" fet="" ret="2016-01-12T14:42:05.246" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:05-00:00" fst="" fet="" ret="2016-01-12T14:42:05.683" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:05-00:00" fst="" fet="" ret="2016-01-12T14:42:05.870" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:06-00:00" fst="" fet="" ret="2016-01-12T14:42:06.701" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:06-00:00" fst="" fet="" ret="2016-01-12T14:42:06.901" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:07-00:00" fst="" fet="" ret="2016-01-12T14:42:07.284" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:07-00:00" fst="" fet="" ret="2016-01-12T14:42:07.754" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:08-00:00" fst="" fet="" ret="2016-01-12T14:42:08.246" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:08-00:00" fst="" fet="" ret="2016-01-12T14:42:08.440" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:08-00:00" fst="" fet="" ret="2016-01-12T14:42:08.878" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:09-00:00" fst="" fet="" ret="2016-01-12T14:42:09.016" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:09-00:00" fst="" fet="" ret="2016-01-12T14:42:09.474" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:10-00:00" fst="" fet="" ret="2016-01-12T14:42:10.272" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:10-00:00" fst="" fet="" ret="2016-01-12T14:42:10.683" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:10-00:00" fst="" fet="" ret="2016-01-12T14:42:10.860" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:11-00:00" fst="" fet="" ret="2016-01-12T14:42:11.330" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:11-00:00" fst="" fet="" ret="2016-01-12T14:42:11.502" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:11-00:00" fst="" fet="" ret="2016-01-12T14:42:11.934" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:12-00:00" fst="" fet="" ret="2016-01-12T14:42:12.094" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:12-00:00" fst="" fet="" ret="2016-01-12T14:42:12.531" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:12-00:00" fst="" fet="" ret="2016-01-12T14:42:12.664" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:13-00:00" fst="" fet="" ret="2016-01-12T14:42:13.091" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:13-00:00" fst="" fet="" ret="2016-01-12T14:42:13.237" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:13-00:00" fst="" fet="" ret="2016-01-12T14:42:13.658" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:13-00:00" fst="" fet="" ret="2016-01-12T14:42:13.832" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:14-00:00" fst="" fet="" ret="2016-01-12T14:42:14.166" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:14-00:00" fst="" fet="" ret="2016-01-12T14:42:14.305" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:14-00:00" fst="" fet="" ret="2016-01-12T14:42:14.621" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:14-00:00" fst="" fet="" ret="2016-01-12T14:42:14.745" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:15-00:00" fst="" fet="" ret="2016-01-12T14:42:15.099" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:15-00:00" fst="" fet="" ret="2016-01-12T14:42:15.242" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:15-00:00" fst="" fet="" ret="2016-01-12T14:42:15.559" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:15-00:00" fst="" fet="" ret="2016-01-12T14:42:15.710" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:16-00:00" fst="" fet="" ret="2016-01-12T14:42:16.039" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:16-00:00" fst="" fet="" ret="2016-01-12T14:42:16.178" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:16-00:00" fst="" fet="" ret="2016-01-12T14:42:16.496" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:16-00:00" fst="" fet="" ret="2016-01-12T14:42:16.627" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:16-00:00" fst="" fet="" ret="2016-01-12T14:42:16.919" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:17-00:00" fst="" fet="" ret="2016-01-12T14:42:17.038" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:17-00:00" fst="" fet="" ret="2016-01-12T14:42:17.306" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:17-00:00" fst="" fet="" ret="2016-01-12T14:42:17.450" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:17-00:00" fst="" fet="" ret="2016-01-12T14:42:17.755" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:17-00:00" fst="" fet="" ret="2016-01-12T14:42:17.898" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:18-00:00" fst="" fet="" ret="2016-01-12T14:42:18.236" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:18-00:00" fst="" fet="" ret="2016-01-12T14:42:18.384" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:18-00:00" fst="" fet="" ret="2016-01-12T14:42:18.705" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:18-00:00" fst="" fet="" ret="2016-01-12T14:42:18.843" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:19-00:00" fst="" fet="" ret="2016-01-12T14:42:19.230" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:19-00:00" fst="" fet="" ret="2016-01-12T14:42:19.352" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:19-00:00" fst="" fet="" ret="2016-01-12T14:42:19.650" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:19-00:00" fst="" fet="" ret="2016-01-12T14:42:19.834" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:20-00:00" fst="" fet="" ret="2016-01-12T14:42:20.096" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:20-00:00" fst="" fet="" ret="2016-01-12T14:42:20.237" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:20-00:00" fst="" fet="" ret="2016-01-12T14:42:20.353" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:20-00:00" fst="" fet="" ret="2016-01-12T14:42:20.436" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:20-00:00" fst="" fet="" ret="2016-01-12T14:42:20.562" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:20-00:00" fst="" fet="" ret="2016-01-12T14:42:20.632" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:20-00:00" fst="" fet="" ret="2016-01-12T14:42:20.755" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:20-00:00" fst="" fet="" ret="2016-01-12T14:42:20.833" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:20-00:00" fst="" fet="" ret="2016-01-12T14:42:20.953" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:21-00:00" fst="" fet="" ret="2016-01-12T14:42:21.028" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:21-00:00" fst="" fet="" ret="2016-01-12T14:42:21.144" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:21-00:00" fst="" fet="" ret="2016-01-12T14:42:21.220" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:21-00:00" fst="" fet="" ret="2016-01-12T14:42:21.342" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:21-00:00" fst="" fet="" ret="2016-01-12T14:42:21.421" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:21-00:00" fst="" fet="" ret="2016-01-12T14:42:21.538" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:21-00:00" fst="" fet="" ret="2016-01-12T14:42:21.611" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:21-00:00" fst="" fet="" ret="2016-01-12T14:42:21.730" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:21-00:00" fst="" fet="" ret="2016-01-12T14:42:21.804" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:21-00:00" fst="" fet="" ret="2016-01-12T14:42:21.931" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:22-00:00" fst="" fet="" ret="2016-01-12T14:42:22.005" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:22-00:00" fst="" fet="" ret="2016-01-12T14:42:22.119" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:22-00:00" fst="" fet="" ret="2016-01-12T14:42:22.190" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:22-00:00" fst="" fet="" ret="2016-01-12T14:42:22.305" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:22-00:00" fst="" fet="" ret="2016-01-12T14:42:22.385" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:22-00:00" fst="" fet="" ret="2016-01-12T14:42:22.500" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:22-00:00" fst="" fet="" ret="2016-01-12T14:42:22.579" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:22-00:00" fst="" fet="" ret="2016-01-12T14:42:22.704" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:22-00:00" fst="" fet="" ret="2016-01-12T14:42:22.779" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:22-00:00" fst="" fet="" ret="2016-01-12T14:42:22.904" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:22-00:00" fst="" fet="" ret="2016-01-12T14:42:22.983" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:23-00:00" fst="" fet="" ret="2016-01-12T14:42:23.099" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:23-00:00" fst="" fet="" ret="2016-01-12T14:42:23.179" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:23-00:00" fst="" fet="" ret="2016-01-12T14:42:23.292" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:23-00:00" fst="" fet="" ret="2016-01-12T14:42:23.361" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:23-00:00" fst="" fet="" ret="2016-01-12T14:42:23.547" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:23-00:00" fst="" fet="" ret="2016-01-12T14:42:23.618" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:23-00:00" fst="" fet="" ret="2016-01-12T14:42:23.851" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:23-00:00" fst="" fet="" ret="2016-01-12T14:42:23.978" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:24-00:00" fst="" fet="" ret="2016-01-12T14:42:24.093" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:24-00:00" fst="" fet="" ret="2016-01-12T14:42:24.161" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:24-00:00" fst="" fet="" ret="2016-01-12T14:42:24.273" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:24-00:00" fst="" fet="" ret="2016-01-12T14:42:24.360" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:24-00:00" fst="" fet="" ret="2016-01-12T14:42:24.479" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:24-00:00" fst="" fet="" ret="2016-01-12T14:42:24.562" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:24-00:00" fst="" fet="" ret="2016-01-12T14:42:24.676" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:24-00:00" fst="" fet="" ret="2016-01-12T14:42:24.745" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:24-00:00" fst="" fet="" ret="2016-01-12T14:42:24.881" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:24-00:00" fst="" fet="" ret="2016-01-12T14:42:24.956" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:25-00:00" fst="" fet="" ret="2016-01-12T14:42:25.074" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:25-00:00" fst="" fet="" ret="2016-01-12T14:42:25.163" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:25-00:00" fst="" fet="" ret="2016-01-12T14:42:25.280" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:25-00:00" fst="" fet="" ret="2016-01-12T14:42:25.358" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:25-00:00" fst="" fet="" ret="2016-01-12T14:42:25.487" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:25-00:00" fst="" fet="" ret="2016-01-12T14:42:25.617" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:25-00:00" fst="" fet="" ret="2016-01-12T14:42:25.734" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:25-00:00" fst="" fet="" ret="2016-01-12T14:42:25.800" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:25-00:00" fst="" fet="" ret="2016-01-12T14:42:25.912" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:25-00:00" fst="" fet="" ret="2016-01-12T14:42:25.988" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:26-00:00" fst="" fet="" ret="2016-01-12T14:42:26.102" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:26-00:00" fst="" fet="" ret="2016-01-12T14:42:26.179" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:26-00:00" fst="" fet="" ret="2016-01-12T14:42:26.341" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:26-00:00" fst="" fet="" ret="2016-01-12T14:42:26.451" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:26-00:00" fst="" fet="" ret="2016-01-12T14:42:26.538" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:26-00:00" fst="" fet="" ret="2016-01-12T14:42:26.615" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:26-00:00" fst="" fet="" ret="2016-01-12T14:42:26.727" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:26-00:00" fst="" fet="" ret="2016-01-12T14:42:26.791" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:26-00:00" fst="" fet="" ret="2016-01-12T14:42:26.936" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:27-00:00" fst="" fet="" ret="2016-01-12T14:42:27.000" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:27-00:00" fst="" fet="" ret="2016-01-12T14:42:27.420" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:27-00:00" fst="" fet="" ret="2016-01-12T14:42:27.592" />
+				<ftr id="741FB3BE-E29C-4E85-A88C-E38CC7741385" scpid="" objid="" rtg="" fud="2016-01-12T14:42:28-00:00" fst="" fet="" ret="2016-01-12T14:42:28.216" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:28-00:00" fst="" fet="" ret="2016-01-12T14:42:28.307" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:28-00:00" fst="" fet="" ret="2016-01-12T14:42:28.392" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:28-00:00" fst="" fet="" ret="2016-01-12T14:42:28.542" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:29-00:00" fst="" fet="" ret="2016-01-12T14:42:29.823" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:30-00:00" fst="" fet="" ret="2016-01-12T14:42:30.096" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:30-00:00" fst="" fet="" ret="2016-01-12T14:42:30.224" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:30-00:00" fst="" fet="" ret="2016-01-12T14:42:30.294" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:42:30-00:00" fst="" fet="" ret="2016-01-12T14:42:30.708" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:42:30-00:00" fst="" fet="" ret="2016-01-12T14:42:30.892" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:42:31-00:00" fst="" fet="" ret="2016-01-12T14:42:31.075" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:42:31-00:00" fst="" fet="" ret="2016-01-12T14:42:31.286" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:42:31-00:00" fst="" fet="" ret="2016-01-12T14:42:31.473" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:42:31-00:00" fst="" fet="" ret="2016-01-12T14:42:31.661" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:31-00:00" fst="" fet="" ret="2016-01-12T14:42:31.778" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:32-00:00" fst="" fet="" ret="2016-01-12T14:42:32.050" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:32-00:00" fst="" fet="" ret="2016-01-12T14:42:32.217" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:32-00:00" fst="" fet="" ret="2016-01-12T14:42:32.278" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:42:32-00:00" fst="" fet="" ret="2016-01-12T14:42:32.692" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:42:33-00:00" fst="" fet="" ret="2016-01-12T14:42:33.502" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:33-00:00" fst="" fet="" ret="2016-01-12T14:42:33.585" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:33-00:00" fst="" fet="" ret="2016-01-12T14:42:33.665" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:33-00:00" fst="" fet="" ret="2016-01-12T14:42:33.796" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:33-00:00" fst="" fet="" ret="2016-01-12T14:42:33.882" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:34-00:00" fst="" fet="" ret="2016-01-12T14:42:34.073" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:34-00:00" fst="" fet="" ret="2016-01-12T14:42:34.203" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:34-00:00" fst="" fet="" ret="2016-01-12T14:42:34.353" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:34-00:00" fst="" fet="" ret="2016-01-12T14:42:34.426" />
+				<ftr id="0DF0762D-16B8-4657-A11A-34A3DF059678" scpid="" objid="" rtg="" fud="2016-01-12T14:42:34-00:00" fst="" fet="" ret="2016-01-12T14:42:34.664" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:34-00:00" fst="" fet="" ret="2016-01-12T14:42:34.741" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:34-00:00" fst="" fet="" ret="2016-01-12T14:42:34.836" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:34-00:00" fst="" fet="" ret="2016-01-12T14:42:34.965" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:35-00:00" fst="" fet="" ret="2016-01-12T14:42:35.259" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:35-00:00" fst="" fet="" ret="2016-01-12T14:42:35.375" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:35-00:00" fst="" fet="" ret="2016-01-12T14:42:35.446" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:35-00:00" fst="" fet="" ret="2016-01-12T14:42:35.591" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:36-00:00" fst="" fet="" ret="2016-01-12T14:42:36.577" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:36-00:00" fst="" fet="" ret="2016-01-12T14:42:36.659" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:36-00:00" fst="" fet="" ret="2016-01-12T14:42:36.778" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:36-00:00" fst="" fet="" ret="2016-01-12T14:42:36.844" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:36-00:00" fst="" fet="" ret="2016-01-12T14:42:36.994" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:37-00:00" fst="" fet="" ret="2016-01-12T14:42:37.070" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:37-00:00" fst="" fet="" ret="2016-01-12T14:42:37.189" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:37-00:00" fst="" fet="" ret="2016-01-12T14:42:37.258" />
+				<ftr id="741FB3BE-E29C-4E85-A88C-E38CC7741385" scpid="" objid="" rtg="" fud="2016-01-12T14:42:37-00:00" fst="" fet="" ret="2016-01-12T14:42:37.516" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:37-00:00" fst="" fet="" ret="2016-01-12T14:42:37.602" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:37-00:00" fst="" fet="" ret="2016-01-12T14:42:37.684" />
+				<ftr id="0DF0762D-16B8-4657-A11A-34A3DF059678" scpid="" objid="" rtg="" fud="2016-01-12T14:42:37-00:00" fst="" fet="" ret="2016-01-12T14:42:37.877" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:37-00:00" fst="" fet="" ret="2016-01-12T14:42:37.947" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:38-00:00" fst="" fet="" ret="2016-01-12T14:42:38.010" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:38-00:00" fst="" fet="" ret="2016-01-12T14:42:38.154" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:38-00:00" fst="" fet="" ret="2016-01-12T14:42:38.271" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:38-00:00" fst="" fet="" ret="2016-01-12T14:42:38.393" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:38-00:00" fst="" fet="" ret="2016-01-12T14:42:38.490" />
+				<ftr id="741FB3BE-E29C-4E85-A88C-E38CC7741385" scpid="" objid="" rtg="" fud="2016-01-12T14:42:38-00:00" fst="" fet="" ret="2016-01-12T14:42:38.746" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:38-00:00" fst="" fet="" ret="2016-01-12T14:42:38.826" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:38-00:00" fst="" fet="" ret="2016-01-12T14:42:38.907" />
+				<ftr id="0DF0762D-16B8-4657-A11A-34A3DF059678" scpid="" objid="" rtg="" fud="2016-01-12T14:42:39-00:00" fst="" fet="" ret="2016-01-12T14:42:39.111" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:39-00:00" fst="" fet="" ret="2016-01-12T14:42:39.210" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:39-00:00" fst="" fet="" ret="2016-01-12T14:42:39.288" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:39-00:00" fst="" fet="" ret="2016-01-12T14:42:39.478" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:39-00:00" fst="" fet="" ret="2016-01-12T14:42:39.567" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:39-00:00" fst="" fet="" ret="2016-01-12T14:42:39.712" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:39-00:00" fst="" fet="" ret="2016-01-12T14:42:39.810" />
+				<ftr id="741FB3BE-E29C-4E85-A88C-E38CC7741385" scpid="" objid="" rtg="" fud="2016-01-12T14:42:40-00:00" fst="" fet="" ret="2016-01-12T14:42:40.102" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:40-00:00" fst="" fet="" ret="2016-01-12T14:42:40.178" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:40-00:00" fst="" fet="" ret="2016-01-12T14:42:40.261" />
+				<ftr id="0DF0762D-16B8-4657-A11A-34A3DF059678" scpid="" objid="" rtg="" fud="2016-01-12T14:42:40-00:00" fst="" fet="" ret="2016-01-12T14:42:40.451" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:40-00:00" fst="" fet="" ret="2016-01-12T14:42:40.519" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:40-00:00" fst="" fet="" ret="2016-01-12T14:42:40.597" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:40-00:00" fst="" fet="" ret="2016-01-12T14:42:40.748" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:40-00:00" fst="" fet="" ret="2016-01-12T14:42:40.841" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:40-00:00" fst="" fet="" ret="2016-01-12T14:42:40.996" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:41-00:00" fst="" fet="" ret="2016-01-12T14:42:41.161" />
+				<ftr id="741FB3BE-E29C-4E85-A88C-E38CC7741385" scpid="" objid="" rtg="" fud="2016-01-12T14:42:41-00:00" fst="" fet="" ret="2016-01-12T14:42:41.614" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:41-00:00" fst="" fet="" ret="2016-01-12T14:42:41.705" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:41-00:00" fst="" fet="" ret="2016-01-12T14:42:41.883" />
+				<ftr id="0DF0762D-16B8-4657-A11A-34A3DF059678" scpid="" objid="" rtg="" fud="2016-01-12T14:42:42-00:00" fst="" fet="" ret="2016-01-12T14:42:42.078" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:42-00:00" fst="" fet="" ret="2016-01-12T14:42:42.180" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:42-00:00" fst="" fet="" ret="2016-01-12T14:42:42.248" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:42-00:00" fst="" fet="" ret="2016-01-12T14:42:42.406" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:42-00:00" fst="" fet="" ret="2016-01-12T14:42:42.492" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:42-00:00" fst="" fet="" ret="2016-01-12T14:42:42.623" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:42:42-00:00" fst="" fet="" ret="2016-01-12T14:42:42.706" />
+				<ftr id="741FB3BE-E29C-4E85-A88C-E38CC7741385" scpid="" objid="" rtg="" fud="2016-01-12T14:42:43-00:00" fst="" fet="" ret="2016-01-12T14:42:43.075" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:43-00:00" fst="" fet="" ret="2016-01-12T14:42:43.162" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:43-00:00" fst="" fet="" ret="2016-01-12T14:42:43.375" />
+				<ftr id="0DF0762D-16B8-4657-A11A-34A3DF059678" scpid="" objid="" rtg="" fud="2016-01-12T14:42:43-00:00" fst="" fet="" ret="2016-01-12T14:42:43.583" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:43-00:00" fst="" fet="" ret="2016-01-12T14:42:43.665" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:43-00:00" fst="" fet="" ret="2016-01-12T14:42:43.744" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:43-00:00" fst="" fet="" ret="2016-01-12T14:42:43.864" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:43-00:00" fst="" fet="" ret="2016-01-12T14:42:43.942" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:44-00:00" fst="" fet="" ret="2016-01-12T14:42:44.102" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:44-00:00" fst="" fet="" ret="2016-01-12T14:42:44.198" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:44-00:00" fst="" fet="" ret="2016-01-12T14:42:44.317" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:44-00:00" fst="" fet="" ret="2016-01-12T14:42:44.490" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:44-00:00" fst="" fet="" ret="2016-01-12T14:42:44.671" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:44-00:00" fst="" fet="" ret="2016-01-12T14:42:44.748" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:44-00:00" fst="" fet="" ret="2016-01-12T14:42:44.873" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:44-00:00" fst="" fet="" ret="2016-01-12T14:42:44.950" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:45-00:00" fst="" fet="" ret="2016-01-12T14:42:45.106" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:45-00:00" fst="" fet="" ret="2016-01-12T14:42:45.191" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:45-00:00" fst="" fet="" ret="2016-01-12T14:42:45.310" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:45-00:00" fst="" fet="" ret="2016-01-12T14:42:45.386" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:45-00:00" fst="" fet="" ret="2016-01-12T14:42:45.638" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:45-00:00" fst="" fet="" ret="2016-01-12T14:42:45.813" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:45-00:00" fst="" fet="" ret="2016-01-12T14:42:45.960" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:46-00:00" fst="" fet="" ret="2016-01-12T14:42:46.036" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:46-00:00" fst="" fet="" ret="2016-01-12T14:42:46.149" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:46-00:00" fst="" fet="" ret="2016-01-12T14:42:46.223" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:46-00:00" fst="" fet="" ret="2016-01-12T14:42:46.347" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:46-00:00" fst="" fet="" ret="2016-01-12T14:42:46.520" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:46-00:00" fst="" fet="" ret="2016-01-12T14:42:46.636" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:46-00:00" fst="" fet="" ret="2016-01-12T14:42:46.708" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:46-00:00" fst="" fet="" ret="2016-01-12T14:42:46.828" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:46-00:00" fst="" fet="" ret="2016-01-12T14:42:46.896" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:47-00:00" fst="" fet="" ret="2016-01-12T14:42:47.005" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:47-00:00" fst="" fet="" ret="2016-01-12T14:42:47.170" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:47-00:00" fst="" fet="" ret="2016-01-12T14:42:47.285" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:47-00:00" fst="" fet="" ret="2016-01-12T14:42:47.361" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:47-00:00" fst="" fet="" ret="2016-01-12T14:42:47.495" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:47-00:00" fst="" fet="" ret="2016-01-12T14:42:47.569" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:47-00:00" fst="" fet="" ret="2016-01-12T14:42:47.692" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:47-00:00" fst="" fet="" ret="2016-01-12T14:42:47.780" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:47-00:00" fst="" fet="" ret="2016-01-12T14:42:47.901" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:47-00:00" fst="" fet="" ret="2016-01-12T14:42:47.983" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:48-00:00" fst="" fet="" ret="2016-01-12T14:42:48.117" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:48-00:00" fst="" fet="" ret="2016-01-12T14:42:48.192" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:48-00:00" fst="" fet="" ret="2016-01-12T14:42:48.325" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:48-00:00" fst="" fet="" ret="2016-01-12T14:42:48.413" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:48-00:00" fst="" fet="" ret="2016-01-12T14:42:48.537" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:48-00:00" fst="" fet="" ret="2016-01-12T14:42:48.612" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:48-00:00" fst="" fet="" ret="2016-01-12T14:42:48.731" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:48-00:00" fst="" fet="" ret="2016-01-12T14:42:48.804" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:48-00:00" fst="" fet="" ret="2016-01-12T14:42:48.923" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:48-00:00" fst="" fet="" ret="2016-01-12T14:42:48.997" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:49-00:00" fst="" fet="" ret="2016-01-12T14:42:49.116" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:49-00:00" fst="" fet="" ret="2016-01-12T14:42:49.401" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:49-00:00" fst="" fet="" ret="2016-01-12T14:42:49.527" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:49-00:00" fst="" fet="" ret="2016-01-12T14:42:49.598" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:50-00:00" fst="" fet="" ret="2016-01-12T14:42:50.035" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:50-00:00" fst="" fet="" ret="2016-01-12T14:42:50.212" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:50-00:00" fst="" fet="" ret="2016-01-12T14:42:50.361" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:50-00:00" fst="" fet="" ret="2016-01-12T14:42:50.435" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:50-00:00" fst="" fet="" ret="2016-01-12T14:42:50.552" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:50-00:00" fst="" fet="" ret="2016-01-12T14:42:50.626" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:50-00:00" fst="" fet="" ret="2016-01-12T14:42:50.816" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:50-00:00" fst="" fet="" ret="2016-01-12T14:42:50.936" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:51-00:00" fst="" fet="" ret="2016-01-12T14:42:51.089" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:51-00:00" fst="" fet="" ret="2016-01-12T14:42:51.370" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:51-00:00" fst="" fet="" ret="2016-01-12T14:42:51.746" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:52-00:00" fst="" fet="" ret="2016-01-12T14:42:52.200" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:52-00:00" fst="" fet="" ret="2016-01-12T14:42:52.583" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:52-00:00" fst="" fet="" ret="2016-01-12T14:42:52.704" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:53-00:00" fst="" fet="" ret="2016-01-12T14:42:53.052" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:53-00:00" fst="" fet="" ret="2016-01-12T14:42:53.180" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:53-00:00" fst="" fet="" ret="2016-01-12T14:42:53.399" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:53-00:00" fst="" fet="" ret="2016-01-12T14:42:53.470" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:53-00:00" fst="" fet="" ret="2016-01-12T14:42:53.589" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:53-00:00" fst="" fet="" ret="2016-01-12T14:42:53.686" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:53-00:00" fst="" fet="" ret="2016-01-12T14:42:53.800" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:53-00:00" fst="" fet="" ret="2016-01-12T14:42:53.873" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:53-00:00" fst="" fet="" ret="2016-01-12T14:42:53.987" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:54-00:00" fst="" fet="" ret="2016-01-12T14:42:54.056" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:54-00:00" fst="" fet="" ret="2016-01-12T14:42:54.184" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:54-00:00" fst="" fet="" ret="2016-01-12T14:42:54.253" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:54-00:00" fst="" fet="" ret="2016-01-12T14:42:54.370" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:54-00:00" fst="" fet="" ret="2016-01-12T14:42:54.443" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:54-00:00" fst="" fet="" ret="2016-01-12T14:42:54.566" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:54-00:00" fst="" fet="" ret="2016-01-12T14:42:54.639" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:54-00:00" fst="" fet="" ret="2016-01-12T14:42:54.761" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:54-00:00" fst="" fet="" ret="2016-01-12T14:42:54.848" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:54-00:00" fst="" fet="" ret="2016-01-12T14:42:54.965" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:55-00:00" fst="" fet="" ret="2016-01-12T14:42:55.038" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:55-00:00" fst="" fet="" ret="2016-01-12T14:42:55.159" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:55-00:00" fst="" fet="" ret="2016-01-12T14:42:55.235" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:55-00:00" fst="" fet="" ret="2016-01-12T14:42:55.358" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:55-00:00" fst="" fet="" ret="2016-01-12T14:42:55.432" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:55-00:00" fst="" fet="" ret="2016-01-12T14:42:55.552" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:55-00:00" fst="" fet="" ret="2016-01-12T14:42:55.626" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:55-00:00" fst="" fet="" ret="2016-01-12T14:42:55.743" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:55-00:00" fst="" fet="" ret="2016-01-12T14:42:55.819" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:55-00:00" fst="" fet="" ret="2016-01-12T14:42:55.933" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:56-00:00" fst="" fet="" ret="2016-01-12T14:42:56.010" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:56-00:00" fst="" fet="" ret="2016-01-12T14:42:56.135" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:56-00:00" fst="" fet="" ret="2016-01-12T14:42:56.214" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:56-00:00" fst="" fet="" ret="2016-01-12T14:42:56.332" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:56-00:00" fst="" fet="" ret="2016-01-12T14:42:56.406" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:56-00:00" fst="" fet="" ret="2016-01-12T14:42:56.535" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:56-00:00" fst="" fet="" ret="2016-01-12T14:42:56.612" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:56-00:00" fst="" fet="" ret="2016-01-12T14:42:56.734" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:56-00:00" fst="" fet="" ret="2016-01-12T14:42:56.809" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:56-00:00" fst="" fet="" ret="2016-01-12T14:42:56.932" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:57-00:00" fst="" fet="" ret="2016-01-12T14:42:57.006" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:57-00:00" fst="" fet="" ret="2016-01-12T14:42:57.196" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:57-00:00" fst="" fet="" ret="2016-01-12T14:42:57.272" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:57-00:00" fst="" fet="" ret="2016-01-12T14:42:57.391" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:57-00:00" fst="" fet="" ret="2016-01-12T14:42:57.466" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:57-00:00" fst="" fet="" ret="2016-01-12T14:42:57.597" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:57-00:00" fst="" fet="" ret="2016-01-12T14:42:57.671" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:57-00:00" fst="" fet="" ret="2016-01-12T14:42:57.786" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:57-00:00" fst="" fet="" ret="2016-01-12T14:42:57.856" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:57-00:00" fst="" fet="" ret="2016-01-12T14:42:57.980" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:58-00:00" fst="" fet="" ret="2016-01-12T14:42:58.059" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:58-00:00" fst="" fet="" ret="2016-01-12T14:42:58.180" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:58-00:00" fst="" fet="" ret="2016-01-12T14:42:58.255" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:58-00:00" fst="" fet="" ret="2016-01-12T14:42:58.372" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:58-00:00" fst="" fet="" ret="2016-01-12T14:42:58.445" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:58-00:00" fst="" fet="" ret="2016-01-12T14:42:58.559" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:58-00:00" fst="" fet="" ret="2016-01-12T14:42:58.630" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:58-00:00" fst="" fet="" ret="2016-01-12T14:42:58.748" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:58-00:00" fst="" fet="" ret="2016-01-12T14:42:58.827" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:58-00:00" fst="" fet="" ret="2016-01-12T14:42:58.939" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:59-00:00" fst="" fet="" ret="2016-01-12T14:42:59.006" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:59-00:00" fst="" fet="" ret="2016-01-12T14:42:59.113" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:59-00:00" fst="" fet="" ret="2016-01-12T14:42:59.179" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:59-00:00" fst="" fet="" ret="2016-01-12T14:42:59.292" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:59-00:00" fst="" fet="" ret="2016-01-12T14:42:59.369" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:59-00:00" fst="" fet="" ret="2016-01-12T14:42:59.506" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:59-00:00" fst="" fet="" ret="2016-01-12T14:42:59.574" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:59-00:00" fst="" fet="" ret="2016-01-12T14:42:59.683" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:59-00:00" fst="" fet="" ret="2016-01-12T14:42:59.761" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:59-00:00" fst="" fet="" ret="2016-01-12T14:42:59.874" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:42:59-00:00" fst="" fet="" ret="2016-01-12T14:42:59.949" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:00-00:00" fst="" fet="" ret="2016-01-12T14:43:00.065" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:00-00:00" fst="" fet="" ret="2016-01-12T14:43:00.143" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:00-00:00" fst="" fet="" ret="2016-01-12T14:43:00.255" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:00-00:00" fst="" fet="" ret="2016-01-12T14:43:00.377" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:00-00:00" fst="" fet="" ret="2016-01-12T14:43:00.519" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:00-00:00" fst="" fet="" ret="2016-01-12T14:43:00.593" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:00-00:00" fst="" fet="" ret="2016-01-12T14:43:00.725" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:00-00:00" fst="" fet="" ret="2016-01-12T14:43:00.800" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:00-00:00" fst="" fet="" ret="2016-01-12T14:43:00.918" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:00-00:00" fst="" fet="" ret="2016-01-12T14:43:00.990" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:01-00:00" fst="" fet="" ret="2016-01-12T14:43:01.105" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:01-00:00" fst="" fet="" ret="2016-01-12T14:43:01.183" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:01-00:00" fst="" fet="" ret="2016-01-12T14:43:01.314" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:01-00:00" fst="" fet="" ret="2016-01-12T14:43:01.397" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:01-00:00" fst="" fet="" ret="2016-01-12T14:43:01.528" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:01-00:00" fst="" fet="" ret="2016-01-12T14:43:01.601" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:01-00:00" fst="" fet="" ret="2016-01-12T14:43:01.716" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:01-00:00" fst="" fet="" ret="2016-01-12T14:43:01.791" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:01-00:00" fst="" fet="" ret="2016-01-12T14:43:01.919" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:01-00:00" fst="" fet="" ret="2016-01-12T14:43:01.996" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:02-00:00" fst="" fet="" ret="2016-01-12T14:43:02.117" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:02-00:00" fst="" fet="" ret="2016-01-12T14:43:02.194" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:02-00:00" fst="" fet="" ret="2016-01-12T14:43:02.312" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:02-00:00" fst="" fet="" ret="2016-01-12T14:43:02.385" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:02-00:00" fst="" fet="" ret="2016-01-12T14:43:02.498" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:02-00:00" fst="" fet="" ret="2016-01-12T14:43:02.574" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:02-00:00" fst="" fet="" ret="2016-01-12T14:43:02.688" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:02-00:00" fst="" fet="" ret="2016-01-12T14:43:02.763" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:02-00:00" fst="" fet="" ret="2016-01-12T14:43:02.886" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:02-00:00" fst="" fet="" ret="2016-01-12T14:43:02.967" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:03-00:00" fst="" fet="" ret="2016-01-12T14:43:03.082" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:03-00:00" fst="" fet="" ret="2016-01-12T14:43:03.156" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:03-00:00" fst="" fet="" ret="2016-01-12T14:43:03.281" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:03-00:00" fst="" fet="" ret="2016-01-12T14:43:03.357" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:03-00:00" fst="" fet="" ret="2016-01-12T14:43:03.559" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:03-00:00" fst="" fet="" ret="2016-01-12T14:43:03.642" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:03-00:00" fst="" fet="" ret="2016-01-12T14:43:03.754" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:03-00:00" fst="" fet="" ret="2016-01-12T14:43:03.838" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:03-00:00" fst="" fet="" ret="2016-01-12T14:43:03.964" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:31-00:00" eTime="2016-01-12T14:43:31-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:31-00:00" fst="" fet="" ret="2016-01-12T14:42:31.785" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:31-00:00" eTime="2016-01-12T14:43:31-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:31-00:00" fst="" fet="" ret="2016-01-12T14:42:31.904" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:31-00:00" eTime="2016-01-12T14:43:31-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:31-00:00" fst="" fet="" ret="2016-01-12T14:42:31.976" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:31-00:00" eTime="2016-01-12T14:43:31-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:32-00:00" fst="" fet="" ret="2016-01-12T14:42:32.001" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:32-00:00" eTime="2016-01-12T14:43:32-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:32-00:00" fst="" fet="" ret="2016-01-12T14:42:32.765" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:32-00:00" eTime="2016-01-12T14:43:32-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:32-00:00" fst="" fet="" ret="2016-01-12T14:42:32.789" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:32-00:00" eTime="2016-01-12T14:43:32-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:32-00:00" fst="" fet="" ret="2016-01-12T14:42:32.867" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:32-00:00" eTime="2016-01-12T14:43:32-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:32-00:00" fst="" fet="" ret="2016-01-12T14:42:32.895" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:33-00:00" eTime="2016-01-12T14:43:33-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:33-00:00" fst="" fet="" ret="2016-01-12T14:42:33.767" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:33-00:00" eTime="2016-01-12T14:43:33-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:33-00:00" fst="" fet="" ret="2016-01-12T14:42:33.815" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:33-00:00" eTime="2016-01-12T14:43:33-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:33-00:00" fst="" fet="" ret="2016-01-12T14:42:33.889" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:33-00:00" eTime="2016-01-12T14:43:33-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:33-00:00" fst="" fet="" ret="2016-01-12T14:42:33.918" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:34-00:00" eTime="2016-01-12T14:43:34-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:34-00:00" fst="" fet="" ret="2016-01-12T14:42:34.772" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:34-00:00" eTime="2016-01-12T14:43:34-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:34-00:00" fst="" fet="" ret="2016-01-12T14:42:34.807" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:34-00:00" eTime="2016-01-12T14:43:34-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:34-00:00" fst="" fet="" ret="2016-01-12T14:42:34.881" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:34-00:00" eTime="2016-01-12T14:43:34-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:34-00:00" fst="" fet="" ret="2016-01-12T14:42:34.912" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:35-00:00" eTime="2016-01-12T14:43:35-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:35-00:00" fst="" fet="" ret="2016-01-12T14:42:35.779" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:35-00:00" eTime="2016-01-12T14:43:35-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:35-00:00" fst="" fet="" ret="2016-01-12T14:42:35.911" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:36-00:00" eTime="2016-01-12T14:43:36-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:36-00:00" fst="" fet="" ret="2016-01-12T14:42:36.014" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:36-00:00" eTime="2016-01-12T14:43:36-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:36-00:00" fst="" fet="" ret="2016-01-12T14:42:36.040" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:36-00:00" eTime="2016-01-12T14:43:36-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:36-00:00" fst="" fet="" ret="2016-01-12T14:42:36.771" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:36-00:00" eTime="2016-01-12T14:43:36-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:36-00:00" fst="" fet="" ret="2016-01-12T14:42:36.800" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:36-00:00" eTime="2016-01-12T14:43:36-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:36-00:00" fst="" fet="" ret="2016-01-12T14:42:36.882" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:36-00:00" eTime="2016-01-12T14:43:36-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:36-00:00" fst="" fet="" ret="2016-01-12T14:42:36.911" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:37-00:00" eTime="2016-01-12T14:43:37-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:37-00:00" fst="" fet="" ret="2016-01-12T14:42:37.770" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:37-00:00" eTime="2016-01-12T14:43:37-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:37-00:00" fst="" fet="" ret="2016-01-12T14:42:37.800" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:37-00:00" eTime="2016-01-12T14:43:37-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:37-00:00" fst="" fet="" ret="2016-01-12T14:42:37.871" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:37-00:00" eTime="2016-01-12T14:43:37-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:37-00:00" fst="" fet="" ret="2016-01-12T14:42:37.899" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:38-00:00" eTime="2016-01-12T14:43:38-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:38-00:00" fst="" fet="" ret="2016-01-12T14:42:38.764" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:38-00:00" eTime="2016-01-12T14:43:38-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:38-00:00" fst="" fet="" ret="2016-01-12T14:42:38.791" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:38-00:00" eTime="2016-01-12T14:43:38-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:38-00:00" fst="" fet="" ret="2016-01-12T14:42:38.866" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:42:38-00:00" eTime="2016-01-12T14:43:38-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:42:38-00:00" fst="" fet="" ret="2016-01-12T14:42:38.896" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="HOLAG6049LONL" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="ARS_MERGE_STAGING/ADMIN" uSID="kxG0/7IzoI65mplpZZ6uCyNZ1sA=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:04-00:00" eTime="2016-01-12T14:44:04-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:04-00:00" fst="" fet="" ret="2016-01-12T14:43:04.028" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:04-00:00" fst="" fet="" ret="2016-01-12T14:43:04.266" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:04-00:00" fst="" fet="" ret="2016-01-12T14:43:04.416" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:04-00:00" fst="" fet="" ret="2016-01-12T14:43:04.824" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:05-00:00" fst="" fet="" ret="2016-01-12T14:43:05.033" />
+				<ftr id="741FB3BE-E29C-4E85-A88C-E38CC7741385" scpid="" objid="" rtg="" fud="2016-01-12T14:43:05-00:00" fst="" fet="" ret="2016-01-12T14:43:05.633" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:05-00:00" fst="" fet="" ret="2016-01-12T14:43:05.720" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:05-00:00" fst="" fet="" ret="2016-01-12T14:43:05.799" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:05-00:00" fst="" fet="" ret="2016-01-12T14:43:05.947" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:06-00:00" fst="" fet="" ret="2016-01-12T14:43:06.467" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:06-00:00" fst="" fet="" ret="2016-01-12T14:43:06.793" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:07-00:00" fst="" fet="" ret="2016-01-12T14:43:07.033" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:07-00:00" fst="" fet="" ret="2016-01-12T14:43:07.351" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:07-00:00" fst="" fet="" ret="2016-01-12T14:43:07.593" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:07-00:00" fst="" fet="" ret="2016-01-12T14:43:07.835" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:07-00:00" fst="" fet="" ret="2016-01-12T14:43:07.920" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:07-00:00" fst="" fet="" ret="2016-01-12T14:43:07.986" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:08-00:00" fst="" fet="" ret="2016-01-12T14:43:08.152" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:08-00:00" fst="" fet="" ret="2016-01-12T14:43:08.218" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:08-00:00" fst="" fet="" ret="2016-01-12T14:43:08.733" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:08-00:00" fst="" fet="" ret="2016-01-12T14:43:08.957" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:09-00:00" fst="" fet="" ret="2016-01-12T14:43:09.134" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:09-00:00" fst="" fet="" ret="2016-01-12T14:43:09.231" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:09-00:00" fst="" fet="" ret="2016-01-12T14:43:09.351" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:09-00:00" fst="" fet="" ret="2016-01-12T14:43:09.437" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:09-00:00" fst="" fet="" ret="2016-01-12T14:43:09.672" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:09-00:00" fst="" fet="" ret="2016-01-12T14:43:09.808" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:10-00:00" fst="" fet="" ret="2016-01-12T14:43:10.118" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:10-00:00" fst="" fet="" ret="2016-01-12T14:43:10.234" />
+				<ftr id="0DF0762D-16B8-4657-A11A-34A3DF059678" scpid="" objid="" rtg="" fud="2016-01-12T14:43:10-00:00" fst="" fet="" ret="2016-01-12T14:43:10.548" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:10-00:00" fst="" fet="" ret="2016-01-12T14:43:10.713" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:10-00:00" fst="" fet="" ret="2016-01-12T14:43:10.813" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:10-00:00" fst="" fet="" ret="2016-01-12T14:43:10.953" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:11-00:00" fst="" fet="" ret="2016-01-12T14:43:11.304" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:11-00:00" fst="" fet="" ret="2016-01-12T14:43:11.611" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:11-00:00" fst="" fet="" ret="2016-01-12T14:43:11.690" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:11-00:00" fst="" fet="" ret="2016-01-12T14:43:11.846" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:12-00:00" fst="" fet="" ret="2016-01-12T14:43:12.695" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:12-00:00" fst="" fet="" ret="2016-01-12T14:43:12.772" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:12-00:00" fst="" fet="" ret="2016-01-12T14:43:12.892" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:12-00:00" fst="" fet="" ret="2016-01-12T14:43:12.978" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:13-00:00" fst="" fet="" ret="2016-01-12T14:43:13.131" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:13-00:00" fst="" fet="" ret="2016-01-12T14:43:13.208" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:13-00:00" fst="" fet="" ret="2016-01-12T14:43:13.331" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:13-00:00" fst="" fet="" ret="2016-01-12T14:43:13.409" />
+				<ftr id="741FB3BE-E29C-4E85-A88C-E38CC7741385" scpid="" objid="" rtg="" fud="2016-01-12T14:43:13-00:00" fst="" fet="" ret="2016-01-12T14:43:13.680" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:13-00:00" fst="" fet="" ret="2016-01-12T14:43:13.774" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:13-00:00" fst="" fet="" ret="2016-01-12T14:43:13.953" />
+				<ftr id="0DF0762D-16B8-4657-A11A-34A3DF059678" scpid="" objid="" rtg="" fud="2016-01-12T14:43:14-00:00" fst="" fet="" ret="2016-01-12T14:43:14.157" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:14-00:00" fst="" fet="" ret="2016-01-12T14:43:14.345" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:14-00:00" fst="" fet="" ret="2016-01-12T14:43:14.455" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:14-00:00" fst="" fet="" ret="2016-01-12T14:43:14.661" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:14-00:00" fst="" fet="" ret="2016-01-12T14:43:14.915" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:15-00:00" fst="" fet="" ret="2016-01-12T14:43:15.032" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:15-00:00" fst="" fet="" ret="2016-01-12T14:43:15.107" />
+				<ftr id="741FB3BE-E29C-4E85-A88C-E38CC7741385" scpid="" objid="" rtg="" fud="2016-01-12T14:43:15-00:00" fst="" fet="" ret="2016-01-12T14:43:15.374" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:15-00:00" fst="" fet="" ret="2016-01-12T14:43:15.451" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:15-00:00" fst="" fet="" ret="2016-01-12T14:43:15.532" />
+				<ftr id="0DF0762D-16B8-4657-A11A-34A3DF059678" scpid="" objid="" rtg="" fud="2016-01-12T14:43:15-00:00" fst="" fet="" ret="2016-01-12T14:43:15.743" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:15-00:00" fst="" fet="" ret="2016-01-12T14:43:15.811" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:15-00:00" fst="" fet="" ret="2016-01-12T14:43:15.874" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:16-00:00" fst="" fet="" ret="2016-01-12T14:43:16.012" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:16-00:00" fst="" fet="" ret="2016-01-12T14:43:16.081" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:16-00:00" fst="" fet="" ret="2016-01-12T14:43:16.207" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:16-00:00" fst="" fet="" ret="2016-01-12T14:43:16.289" />
+				<ftr id="741FB3BE-E29C-4E85-A88C-E38CC7741385" scpid="" objid="" rtg="" fud="2016-01-12T14:43:16-00:00" fst="" fet="" ret="2016-01-12T14:43:16.561" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:16-00:00" fst="" fet="" ret="2016-01-12T14:43:16.641" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:16-00:00" fst="" fet="" ret="2016-01-12T14:43:16.720" />
+				<ftr id="0DF0762D-16B8-4657-A11A-34A3DF059678" scpid="" objid="" rtg="" fud="2016-01-12T14:43:16-00:00" fst="" fet="" ret="2016-01-12T14:43:16.922" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:17-00:00" fst="" fet="" ret="2016-01-12T14:43:17.010" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:17-00:00" fst="" fet="" ret="2016-01-12T14:43:17.078" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:17-00:00" fst="" fet="" ret="2016-01-12T14:43:17.235" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:17-00:00" fst="" fet="" ret="2016-01-12T14:43:17.320" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:17-00:00" fst="" fet="" ret="2016-01-12T14:43:17.444" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:17-00:00" fst="" fet="" ret="2016-01-12T14:43:17.514" />
+				<ftr id="741FB3BE-E29C-4E85-A88C-E38CC7741385" scpid="" objid="" rtg="" fud="2016-01-12T14:43:17-00:00" fst="" fet="" ret="2016-01-12T14:43:17.862" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:17-00:00" fst="" fet="" ret="2016-01-12T14:43:17.947" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:18-00:00" fst="" fet="" ret="2016-01-12T14:43:18.121" />
+				<ftr id="0DF0762D-16B8-4657-A11A-34A3DF059678" scpid="" objid="" rtg="" fud="2016-01-12T14:43:18-00:00" fst="" fet="" ret="2016-01-12T14:43:18.309" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:18-00:00" fst="" fet="" ret="2016-01-12T14:43:18.419" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:18-00:00" fst="" fet="" ret="2016-01-12T14:43:18.505" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:18-00:00" fst="" fet="" ret="2016-01-12T14:43:18.664" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:18-00:00" fst="" fet="" ret="2016-01-12T14:43:18.757" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:18-00:00" fst="" fet="" ret="2016-01-12T14:43:18.876" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:18-00:00" fst="" fet="" ret="2016-01-12T14:43:18.950" />
+				<ftr id="741FB3BE-E29C-4E85-A88C-E38CC7741385" scpid="" objid="" rtg="" fud="2016-01-12T14:43:19-00:00" fst="" fet="" ret="2016-01-12T14:43:19.252" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:19-00:00" fst="" fet="" ret="2016-01-12T14:43:19.443" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:19-00:00" fst="" fet="" ret="2016-01-12T14:43:19.596" />
+				<ftr id="0DF0762D-16B8-4657-A11A-34A3DF059678" scpid="" objid="" rtg="" fud="2016-01-12T14:43:20-00:00" fst="" fet="" ret="2016-01-12T14:43:20.041" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:20-00:00" fst="" fet="" ret="2016-01-12T14:43:20.301" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:20-00:00" fst="" fet="" ret="2016-01-12T14:43:20.372" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:20-00:00" fst="" fet="" ret="2016-01-12T14:43:20.504" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:20-00:00" fst="" fet="" ret="2016-01-12T14:43:20.581" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:20-00:00" fst="" fet="" ret="2016-01-12T14:43:20.775" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:20-00:00" fst="" fet="" ret="2016-01-12T14:43:20.852" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:20-00:00" fst="" fet="" ret="2016-01-12T14:43:20.968" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:21-00:00" fst="" fet="" ret="2016-01-12T14:43:21.040" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:21-00:00" fst="" fet="" ret="2016-01-12T14:43:21.209" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:21-00:00" fst="" fet="" ret="2016-01-12T14:43:21.296" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:21-00:00" fst="" fet="" ret="2016-01-12T14:43:21.424" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:21-00:00" fst="" fet="" ret="2016-01-12T14:43:21.500" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:21-00:00" fst="" fet="" ret="2016-01-12T14:43:21.621" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:21-00:00" fst="" fet="" ret="2016-01-12T14:43:21.698" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:21-00:00" fst="" fet="" ret="2016-01-12T14:43:21.814" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:21-00:00" fst="" fet="" ret="2016-01-12T14:43:21.888" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:22-00:00" fst="" fet="" ret="2016-01-12T14:43:22.017" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:22-00:00" fst="" fet="" ret="2016-01-12T14:43:22.093" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:22-00:00" fst="" fet="" ret="2016-01-12T14:43:22.232" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:22-00:00" fst="" fet="" ret="2016-01-12T14:43:22.324" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:22-00:00" fst="" fet="" ret="2016-01-12T14:43:22.633" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:22-00:00" fst="" fet="" ret="2016-01-12T14:43:22.770" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:23-00:00" fst="" fet="" ret="2016-01-12T14:43:23.161" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:23-00:00" fst="" fet="" ret="2016-01-12T14:43:23.306" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:23-00:00" fst="" fet="" ret="2016-01-12T14:43:23.593" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:23-00:00" fst="" fet="" ret="2016-01-12T14:43:23.696" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:23-00:00" fst="" fet="" ret="2016-01-12T14:43:23.816" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:23-00:00" fst="" fet="" ret="2016-01-12T14:43:23.900" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:24-00:00" fst="" fet="" ret="2016-01-12T14:43:24.020" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:24-00:00" fst="" fet="" ret="2016-01-12T14:43:24.092" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:24-00:00" fst="" fet="" ret="2016-01-12T14:43:24.233" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:24-00:00" fst="" fet="" ret="2016-01-12T14:43:24.306" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:24-00:00" fst="" fet="" ret="2016-01-12T14:43:24.431" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:24-00:00" fst="" fet="" ret="2016-01-12T14:43:24.504" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:24-00:00" fst="" fet="" ret="2016-01-12T14:43:24.669" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:24-00:00" fst="" fet="" ret="2016-01-12T14:43:24.784" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:24-00:00" fst="" fet="" ret="2016-01-12T14:43:24.920" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:24-00:00" fst="" fet="" ret="2016-01-12T14:43:24.989" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:25-00:00" fst="" fet="" ret="2016-01-12T14:43:25.109" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:25-00:00" fst="" fet="" ret="2016-01-12T14:43:25.184" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:25-00:00" fst="" fet="" ret="2016-01-12T14:43:25.312" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:25-00:00" fst="" fet="" ret="2016-01-12T14:43:25.387" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:25-00:00" fst="" fet="" ret="2016-01-12T14:43:25.505" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:25-00:00" fst="" fet="" ret="2016-01-12T14:43:25.576" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:25-00:00" fst="" fet="" ret="2016-01-12T14:43:25.692" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:25-00:00" fst="" fet="" ret="2016-01-12T14:43:25.765" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:25-00:00" fst="" fet="" ret="2016-01-12T14:43:25.899" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:25-00:00" fst="" fet="" ret="2016-01-12T14:43:25.972" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:26-00:00" fst="" fet="" ret="2016-01-12T14:43:26.090" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:26-00:00" fst="" fet="" ret="2016-01-12T14:43:26.166" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:26-00:00" fst="" fet="" ret="2016-01-12T14:43:26.312" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:26-00:00" fst="" fet="" ret="2016-01-12T14:43:26.386" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:26-00:00" fst="" fet="" ret="2016-01-12T14:43:26.553" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:26-00:00" fst="" fet="" ret="2016-01-12T14:43:26.628" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:26-00:00" fst="" fet="" ret="2016-01-12T14:43:26.751" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:26-00:00" fst="" fet="" ret="2016-01-12T14:43:26.826" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:26-00:00" fst="" fet="" ret="2016-01-12T14:43:26.947" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:27-00:00" fst="" fet="" ret="2016-01-12T14:43:27.096" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:27-00:00" fst="" fet="" ret="2016-01-12T14:43:27.221" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:27-00:00" fst="" fet="" ret="2016-01-12T14:43:27.299" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:27-00:00" fst="" fet="" ret="2016-01-12T14:43:27.431" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:27-00:00" fst="" fet="" ret="2016-01-12T14:43:27.505" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:27-00:00" fst="" fet="" ret="2016-01-12T14:43:27.622" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:27-00:00" fst="" fet="" ret="2016-01-12T14:43:27.692" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:27-00:00" fst="" fet="" ret="2016-01-12T14:43:27.804" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:27-00:00" fst="" fet="" ret="2016-01-12T14:43:27.876" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:27-00:00" fst="" fet="" ret="2016-01-12T14:43:27.999" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:28-00:00" fst="" fet="" ret="2016-01-12T14:43:28.075" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:28-00:00" fst="" fet="" ret="2016-01-12T14:43:28.198" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:28-00:00" fst="" fet="" ret="2016-01-12T14:43:28.278" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:28-00:00" fst="" fet="" ret="2016-01-12T14:43:28.412" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:28-00:00" fst="" fet="" ret="2016-01-12T14:43:28.488" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:28-00:00" fst="" fet="" ret="2016-01-12T14:43:28.611" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:28-00:00" fst="" fet="" ret="2016-01-12T14:43:28.689" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:28-00:00" fst="" fet="" ret="2016-01-12T14:43:28.855" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:28-00:00" fst="" fet="" ret="2016-01-12T14:43:28.942" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:29-00:00" fst="" fet="" ret="2016-01-12T14:43:29.083" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:29-00:00" fst="" fet="" ret="2016-01-12T14:43:29.158" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:29-00:00" fst="" fet="" ret="2016-01-12T14:43:29.283" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:29-00:00" fst="" fet="" ret="2016-01-12T14:43:29.358" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:29-00:00" fst="" fet="" ret="2016-01-12T14:43:29.539" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:29-00:00" fst="" fet="" ret="2016-01-12T14:43:29.625" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:29-00:00" fst="" fet="" ret="2016-01-12T14:43:29.785" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:29-00:00" fst="" fet="" ret="2016-01-12T14:43:29.868" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:30-00:00" fst="" fet="" ret="2016-01-12T14:43:30.005" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:30-00:00" fst="" fet="" ret="2016-01-12T14:43:30.088" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:30-00:00" fst="" fet="" ret="2016-01-12T14:43:30.226" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:30-00:00" fst="" fet="" ret="2016-01-12T14:43:30.313" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:30-00:00" fst="" fet="" ret="2016-01-12T14:43:30.459" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:30-00:00" fst="" fet="" ret="2016-01-12T14:43:30.539" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:30-00:00" fst="" fet="" ret="2016-01-12T14:43:30.680" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:30-00:00" fst="" fet="" ret="2016-01-12T14:43:30.757" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:30-00:00" fst="" fet="" ret="2016-01-12T14:43:30.900" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:30-00:00" fst="" fet="" ret="2016-01-12T14:43:30.986" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:31-00:00" fst="" fet="" ret="2016-01-12T14:43:31.161" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:31-00:00" fst="" fet="" ret="2016-01-12T14:43:31.274" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:31-00:00" fst="" fet="" ret="2016-01-12T14:43:31.439" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:31-00:00" fst="" fet="" ret="2016-01-12T14:43:31.530" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:31-00:00" fst="" fet="" ret="2016-01-12T14:43:31.655" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:31-00:00" fst="" fet="" ret="2016-01-12T14:43:31.736" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:31-00:00" fst="" fet="" ret="2016-01-12T14:43:31.886" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:32-00:00" fst="" fet="" ret="2016-01-12T14:43:32.056" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:32-00:00" fst="" fet="" ret="2016-01-12T14:43:32.228" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:32-00:00" fst="" fet="" ret="2016-01-12T14:43:32.329" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:32-00:00" fst="" fet="" ret="2016-01-12T14:43:32.629" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:32-00:00" fst="" fet="" ret="2016-01-12T14:43:32.711" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:32-00:00" fst="" fet="" ret="2016-01-12T14:43:32.843" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:32-00:00" fst="" fet="" ret="2016-01-12T14:43:32.933" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:33-00:00" fst="" fet="" ret="2016-01-12T14:43:33.183" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:33-00:00" fst="" fet="" ret="2016-01-12T14:43:33.312" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:33-00:00" fst="" fet="" ret="2016-01-12T14:43:33.562" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:33-00:00" fst="" fet="" ret="2016-01-12T14:43:33.637" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:33-00:00" fst="" fet="" ret="2016-01-12T14:43:33.764" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:33-00:00" fst="" fet="" ret="2016-01-12T14:43:33.846" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:33-00:00" fst="" fet="" ret="2016-01-12T14:43:33.983" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:34-00:00" fst="" fet="" ret="2016-01-12T14:43:34.056" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:34-00:00" fst="" fet="" ret="2016-01-12T14:43:34.181" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:34-00:00" fst="" fet="" ret="2016-01-12T14:43:34.258" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:34-00:00" fst="" fet="" ret="2016-01-12T14:43:34.419" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:34-00:00" fst="" fet="" ret="2016-01-12T14:43:34.502" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:34-00:00" fst="" fet="" ret="2016-01-12T14:43:34.687" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:34-00:00" fst="" fet="" ret="2016-01-12T14:43:34.791" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:35-00:00" fst="" fet="" ret="2016-01-12T14:43:35.068" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:35-00:00" fst="" fet="" ret="2016-01-12T14:43:35.177" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:35-00:00" fst="" fet="" ret="2016-01-12T14:43:35.381" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:35-00:00" fst="" fet="" ret="2016-01-12T14:43:35.468" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:35-00:00" fst="" fet="" ret="2016-01-12T14:43:35.667" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:35-00:00" fst="" fet="" ret="2016-01-12T14:43:35.842" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:35-00:00" fst="" fet="" ret="2016-01-12T14:43:35.962" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:36-00:00" fst="" fet="" ret="2016-01-12T14:43:36.049" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:36-00:00" fst="" fet="" ret="2016-01-12T14:43:36.195" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:36-00:00" fst="" fet="" ret="2016-01-12T14:43:36.289" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:36-00:00" fst="" fet="" ret="2016-01-12T14:43:36.490" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:36-00:00" fst="" fet="" ret="2016-01-12T14:43:36.595" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:36-00:00" fst="" fet="" ret="2016-01-12T14:43:36.733" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:36-00:00" fst="" fet="" ret="2016-01-12T14:43:36.812" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:36-00:00" fst="" fet="" ret="2016-01-12T14:43:36.953" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:37-00:00" fst="" fet="" ret="2016-01-12T14:43:37.027" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:37-00:00" fst="" fet="" ret="2016-01-12T14:43:37.155" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:37-00:00" fst="" fet="" ret="2016-01-12T14:43:37.261" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:37-00:00" fst="" fet="" ret="2016-01-12T14:43:37.442" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:37-00:00" fst="" fet="" ret="2016-01-12T14:43:37.531" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:37-00:00" fst="" fet="" ret="2016-01-12T14:43:37.673" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:37-00:00" fst="" fet="" ret="2016-01-12T14:43:37.755" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:37-00:00" fst="" fet="" ret="2016-01-12T14:43:37.904" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:37-00:00" fst="" fet="" ret="2016-01-12T14:43:37.977" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:38-00:00" fst="" fet="" ret="2016-01-12T14:43:38.095" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:38-00:00" fst="" fet="" ret="2016-01-12T14:43:38.169" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:38-00:00" fst="" fet="" ret="2016-01-12T14:43:38.284" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:38-00:00" fst="" fet="" ret="2016-01-12T14:43:38.362" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:38-00:00" fst="" fet="" ret="2016-01-12T14:43:38.501" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:38-00:00" fst="" fet="" ret="2016-01-12T14:43:38.584" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:38-00:00" fst="" fet="" ret="2016-01-12T14:43:38.720" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:38-00:00" fst="" fet="" ret="2016-01-12T14:43:38.797" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:38-00:00" fst="" fet="" ret="2016-01-12T14:43:38.923" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:38-00:00" fst="" fet="" ret="2016-01-12T14:43:38.993" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:39-00:00" fst="" fet="" ret="2016-01-12T14:43:39.119" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:39-00:00" fst="" fet="" ret="2016-01-12T14:43:39.194" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:39-00:00" fst="" fet="" ret="2016-01-12T14:43:39.311" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:39-00:00" fst="" fet="" ret="2016-01-12T14:43:39.388" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:39-00:00" fst="" fet="" ret="2016-01-12T14:43:39.539" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:39-00:00" fst="" fet="" ret="2016-01-12T14:43:39.620" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:39-00:00" fst="" fet="" ret="2016-01-12T14:43:39.756" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:39-00:00" fst="" fet="" ret="2016-01-12T14:43:39.840" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:39-00:00" fst="" fet="" ret="2016-01-12T14:43:39.975" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:40-00:00" fst="" fet="" ret="2016-01-12T14:43:40.062" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:40-00:00" fst="" fet="" ret="2016-01-12T14:43:40.189" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:40-00:00" fst="" fet="" ret="2016-01-12T14:43:40.263" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:40-00:00" fst="" fet="" ret="2016-01-12T14:43:40.387" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:40-00:00" fst="" fet="" ret="2016-01-12T14:43:40.464" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:40-00:00" fst="" fet="" ret="2016-01-12T14:43:40.603" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:40-00:00" fst="" fet="" ret="2016-01-12T14:43:40.722" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:40-00:00" fst="" fet="" ret="2016-01-12T14:43:40.853" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:40-00:00" fst="" fet="" ret="2016-01-12T14:43:40.944" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:41-00:00" fst="" fet="" ret="2016-01-12T14:43:41.055" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:41-00:00" fst="" fet="" ret="2016-01-12T14:43:41.119" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:41-00:00" fst="" fet="" ret="2016-01-12T14:43:41.293" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:41-00:00" fst="" fet="" ret="2016-01-12T14:43:41.493" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:41-00:00" fst="" fet="" ret="2016-01-12T14:43:41.927" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:42-00:00" fst="" fet="" ret="2016-01-12T14:43:42.163" />
+				<ftr id="741FB3BE-E29C-4E85-A88C-E38CC7741385" scpid="" objid="" rtg="" fud="2016-01-12T14:43:42-00:00" fst="" fet="" ret="2016-01-12T14:43:42.873" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:43-00:00" fst="" fet="" ret="2016-01-12T14:43:43.093" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:43-00:00" fst="" fet="" ret="2016-01-12T14:43:43.256" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:43:43-00:00" fst="" fet="" ret="2016-01-12T14:43:43.460" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:44-00:00" fst="" fet="" ret="2016-01-12T14:43:44.287" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:44-00:00" fst="" fet="" ret="2016-01-12T14:43:44.448" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:44-00:00" fst="" fet="" ret="2016-01-12T14:43:44.676" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:44-00:00" fst="" fet="" ret="2016-01-12T14:43:44.824" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:45-00:00" fst="" fet="" ret="2016-01-12T14:43:45.439" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:45-00:00" fst="" fet="" ret="2016-01-12T14:43:45.522" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:45-00:00" fst="" fet="" ret="2016-01-12T14:43:45.647" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:45-00:00" fst="" fet="" ret="2016-01-12T14:43:45.847" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:45-00:00" fst="" fet="" ret="2016-01-12T14:43:45.915" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:46-00:00" fst="" fet="" ret="2016-01-12T14:43:46.695" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:46-00:00" fst="" fet="" ret="2016-01-12T14:43:46.956" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:47-00:00" fst="" fet="" ret="2016-01-12T14:43:47.123" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:47-00:00" fst="" fet="" ret="2016-01-12T14:43:47.255" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:47-00:00" fst="" fet="" ret="2016-01-12T14:43:47.393" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:47-00:00" fst="" fet="" ret="2016-01-12T14:43:47.539" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:48-00:00" fst="" fet="" ret="2016-01-12T14:43:48.044" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:48-00:00" fst="" fet="" ret="2016-01-12T14:43:48.140" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:48-00:00" fst="" fet="" ret="2016-01-12T14:43:48.206" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:48-00:00" fst="" fet="" ret="2016-01-12T14:43:48.390" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:48-00:00" fst="" fet="" ret="2016-01-12T14:43:48.495" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:48-00:00" fst="" fet="" ret="2016-01-12T14:43:48.990" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:49-00:00" fst="" fet="" ret="2016-01-12T14:43:49.096" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:49-00:00" fst="" fet="" ret="2016-01-12T14:43:49.166" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:49-00:00" fst="" fet="" ret="2016-01-12T14:43:49.382" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:49-00:00" fst="" fet="" ret="2016-01-12T14:43:49.455" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:50-00:00" fst="" fet="" ret="2016-01-12T14:43:50.055" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:50-00:00" fst="" fet="" ret="2016-01-12T14:43:50.213" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:50-00:00" fst="" fet="" ret="2016-01-12T14:43:50.459" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:50-00:00" fst="" fet="" ret="2016-01-12T14:43:50.703" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:50-00:00" fst="" fet="" ret="2016-01-12T14:43:50.865" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:51-00:00" fst="" fet="" ret="2016-01-12T14:43:51.898" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:52-00:00" fst="" fet="" ret="2016-01-12T14:43:52.136" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:52-00:00" fst="" fet="" ret="2016-01-12T14:43:52.354" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:52-00:00" fst="" fet="" ret="2016-01-12T14:43:52.557" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:52-00:00" fst="" fet="" ret="2016-01-12T14:43:52.710" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:53-00:00" fst="" fet="" ret="2016-01-12T14:43:53.309" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:53-00:00" fst="" fet="" ret="2016-01-12T14:43:53.831" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:54-00:00" fst="" fet="" ret="2016-01-12T14:43:54.348" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:54-00:00" fst="" fet="" ret="2016-01-12T14:43:54.593" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:54-00:00" fst="" fet="" ret="2016-01-12T14:43:54.762" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:55-00:00" fst="" fet="" ret="2016-01-12T14:43:55.281" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:55-00:00" fst="" fet="" ret="2016-01-12T14:43:55.401" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:55-00:00" fst="" fet="" ret="2016-01-12T14:43:55.514" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:55-00:00" fst="" fet="" ret="2016-01-12T14:43:55.728" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:43:55-00:00" fst="" fet="" ret="2016-01-12T14:43:55.831" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:56-00:00" fst="" fet="" ret="2016-01-12T14:43:56.733" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:57-00:00" fst="" fet="" ret="2016-01-12T14:43:57.520" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:58-00:00" fst="" fet="" ret="2016-01-12T14:43:58.141" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:58-00:00" fst="" fet="" ret="2016-01-12T14:43:58.838" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:59-00:00" fst="" fet="" ret="2016-01-12T14:43:59.253" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:59-00:00" fst="" fet="" ret="2016-01-12T14:43:59.566" />
+				<ftr id="260619C1-57ED-483C-B1D6-AE944B9D8D98" scpid="" objid="" rtg="" fud="2016-01-12T14:43:59-00:00" fst="" fet="" ret="2016-01-12T14:43:59.977" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:44:00-00:00" fst="" fet="" ret="2016-01-12T14:44:00.182" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:44:00-00:00" fst="" fet="" ret="2016-01-12T14:44:00.276" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:44:00-00:00" fst="" fet="" ret="2016-01-12T14:44:00.628" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:44:00-00:00" fst="" fet="" ret="2016-01-12T14:44:00.799" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:44:01-00:00" fst="" fet="" ret="2016-01-12T14:44:01.203" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:44:01-00:00" fst="" fet="" ret="2016-01-12T14:44:01.419" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:44:01-00:00" fst="" fet="" ret="2016-01-12T14:44:01.580" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:44:01-00:00" fst="" fet="" ret="2016-01-12T14:44:01.706" />
+				<ftr id="0DF0762D-16B8-4657-A11A-34A3DF059678" scpid="" objid="" rtg="" fud="2016-01-12T14:44:01-00:00" fst="" fet="" ret="2016-01-12T14:44:01.975" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:44:02-00:00" fst="" fet="" ret="2016-01-12T14:44:02.243" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:44:02-00:00" fst="" fet="" ret="2016-01-12T14:44:02.339" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:44:02-00:00" fst="" fet="" ret="2016-01-12T14:44:02.486" />
+				<ftr id="2DE2DF7C-C7E4-47C9-901F-F7D6DAE2713A" scpid="" objid="" rtg="" fud="2016-01-12T14:44:02-00:00" fst="" fet="" ret="2016-01-12T14:44:02.992" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:44:03-00:00" fst="" fet="" ret="2016-01-12T14:44:03.250" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:44:03-00:00" fst="" fet="" ret="2016-01-12T14:44:03.527" />
+				<ftr id="5B2DE5A1-B935-4691-81B9-A210496F83C1" scpid="" objid="" rtg="" fud="2016-01-12T14:44:03-00:00" fst="" fet="" ret="2016-01-12T14:44:03.715" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:07-00:00" eTime="2016-01-12T14:44:07-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:07-00:00" fst="" fet="" ret="2016-01-12T14:43:07.521" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:07-00:00" eTime="2016-01-12T14:44:07-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:07-00:00" fst="" fet="" ret="2016-01-12T14:43:07.544" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:07-00:00" eTime="2016-01-12T14:44:07-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:07-00:00" fst="" fet="" ret="2016-01-12T14:43:07.610" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:07-00:00" eTime="2016-01-12T14:44:07-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:07-00:00" fst="" fet="" ret="2016-01-12T14:43:07.635" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:08-00:00" eTime="2016-01-12T14:44:08-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:08-00:00" fst="" fet="" ret="2016-01-12T14:43:08.528" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:08-00:00" eTime="2016-01-12T14:44:08-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:08-00:00" fst="" fet="" ret="2016-01-12T14:43:08.555" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:08-00:00" eTime="2016-01-12T14:44:08-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:08-00:00" fst="" fet="" ret="2016-01-12T14:43:08.716" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:08-00:00" eTime="2016-01-12T14:44:08-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:08-00:00" fst="" fet="" ret="2016-01-12T14:43:08.749" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:09-00:00" eTime="2016-01-12T14:44:09-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:09-00:00" fst="" fet="" ret="2016-01-12T14:43:09.567" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:09-00:00" eTime="2016-01-12T14:44:09-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:09-00:00" fst="" fet="" ret="2016-01-12T14:43:09.665" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:09-00:00" eTime="2016-01-12T14:44:09-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:09-00:00" fst="" fet="" ret="2016-01-12T14:43:09.974" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:10-00:00" eTime="2016-01-12T14:44:10-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:10-00:00" fst="" fet="" ret="2016-01-12T14:43:10.069" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:10-00:00" eTime="2016-01-12T14:44:10-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:10-00:00" fst="" fet="" ret="2016-01-12T14:43:10.583" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:10-00:00" eTime="2016-01-12T14:44:10-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:10-00:00" fst="" fet="" ret="2016-01-12T14:43:10.652" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:10-00:00" eTime="2016-01-12T14:44:10-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:10-00:00" fst="" fet="" ret="2016-01-12T14:43:10.745" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:10-00:00" eTime="2016-01-12T14:44:10-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:10-00:00" fst="" fet="" ret="2016-01-12T14:43:10.796" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:11-00:00" eTime="2016-01-12T14:44:11-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:11-00:00" fst="" fet="" ret="2016-01-12T14:43:11.599" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:11-00:00" eTime="2016-01-12T14:44:11-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:11-00:00" fst="" fet="" ret="2016-01-12T14:43:11.665" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:11-00:00" eTime="2016-01-12T14:44:11-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:11-00:00" fst="" fet="" ret="2016-01-12T14:43:11.752" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:11-00:00" eTime="2016-01-12T14:44:11-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:11-00:00" fst="" fet="" ret="2016-01-12T14:43:11.786" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:12-00:00" eTime="2016-01-12T14:44:12-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:12-00:00" fst="" fet="" ret="2016-01-12T14:43:12.559" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:12-00:00" eTime="2016-01-12T14:44:12-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:12-00:00" fst="" fet="" ret="2016-01-12T14:43:12.594" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:12-00:00" eTime="2016-01-12T14:44:12-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:12-00:00" fst="" fet="" ret="2016-01-12T14:43:12.672" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:12-00:00" eTime="2016-01-12T14:44:12-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:12-00:00" fst="" fet="" ret="2016-01-12T14:43:12.701" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:13-00:00" eTime="2016-01-12T14:44:13-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:13-00:00" fst="" fet="" ret="2016-01-12T14:43:13.526" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:13-00:00" eTime="2016-01-12T14:44:13-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:13-00:00" fst="" fet="" ret="2016-01-12T14:43:13.553" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:13-00:00" eTime="2016-01-12T14:44:13-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:13-00:00" fst="" fet="" ret="2016-01-12T14:43:13.727" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:13-00:00" eTime="2016-01-12T14:44:13-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:13-00:00" fst="" fet="" ret="2016-01-12T14:43:13.758" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:14-00:00" eTime="2016-01-12T14:44:14-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:14-00:00" fst="" fet="" ret="2016-01-12T14:43:14.557" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:14-00:00" eTime="2016-01-12T14:44:14-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:14-00:00" fst="" fet="" ret="2016-01-12T14:43:14.604" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:14-00:00" eTime="2016-01-12T14:44:14-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:14-00:00" fst="" fet="" ret="2016-01-12T14:43:14.678" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:14-00:00" eTime="2016-01-12T14:44:14-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:14-00:00" fst="" fet="" ret="2016-01-12T14:43:14.705" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:46-00:00" eTime="2016-01-12T14:44:46-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:46-00:00" fst="" fet="" ret="2016-01-12T14:43:46.499" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:46-00:00" eTime="2016-01-12T14:44:46-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:46-00:00" fst="" fet="" ret="2016-01-12T14:43:46.529" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:46-00:00" eTime="2016-01-12T14:44:46-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:46-00:00" fst="" fet="" ret="2016-01-12T14:43:46.680" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:46-00:00" eTime="2016-01-12T14:44:46-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:46-00:00" fst="" fet="" ret="2016-01-12T14:43:46.708" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:47-00:00" eTime="2016-01-12T14:44:47-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:47-00:00" fst="" fet="" ret="2016-01-12T14:43:47.754" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:47-00:00" eTime="2016-01-12T14:44:47-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:47-00:00" fst="" fet="" ret="2016-01-12T14:43:47.782" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:47-00:00" eTime="2016-01-12T14:44:47-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:47-00:00" fst="" fet="" ret="2016-01-12T14:43:47.855" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:47-00:00" eTime="2016-01-12T14:44:47-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:47-00:00" fst="" fet="" ret="2016-01-12T14:43:47.885" />
+			</ftrs>
+		</rec>
+		<rec Ver="16.4.5" hID="holag6049lonl.bentley.com" cSID="K85yp9WYZMX39Kycv2MzoOotwgs=" uID="BENTLEY\Gubby.Holait" uSID="+lKCtUBwZTQR/Li3i5ZIdzoOEHc=" cAttrs="osver=6.1.1.256.1.0,x64;arch=0;fue=1;licver=10.0.0.15,x64" sTime="2016-01-12T14:43:48-00:00" eTime="2016-01-12T14:44:48-00:00" projID="00000000-0000-0000-0000-000000000000" docID="00000000-0000-0000-0000-000000000000" imsID="00000000-0000-0000-0000-000000000000">
+			<ftrs>
+				<ftr id="EE675C14-FFEC-436B-84D3-F8C946B30EDE" scpid="" objid="" rtg="" fud="2016-01-12T14:43:48-00:00" fst="" fet="" ret="2016-01-12T14:43:48.754" />
+			</ftrs>
+		</rec>
+	</lics>
+*/
