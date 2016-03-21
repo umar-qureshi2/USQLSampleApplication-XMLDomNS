@@ -33,20 +33,20 @@ REFERENCE ASSEMBLY [USQLCSharpProject1];
 //
 //OUTPUT @e TO @"C:\excel\output.csv" USING Outputters.Csv(quoting:false);
 
-//////
-//////@e =
-//////    EXTRACT a string,
-//////            b string
-//////    FROM @"C:\excel\1001464881_1001464795_2016-01-13_10.00.01.689__1900.xml"
-//////    USING new USQLCSharpProject1.XmlDomExtractorNs(
-//////          rowPath : "lics:rec",
-//////          columnPaths : new SQL.MAP<string, string>{ {"lics:ftrs/lics:ftr/@id", "a"},{"lics:ftrs","b"} },
-//////          namespaces : "lics=http://bentley.com/selectserver/webservices/"
-//////          );
-//////
-//////OUTPUT @e
-//////TO @"C:\excel\output.csv"
-//////USING Outputters.Csv(quoting : false);
+////
+////@e =
+////    extract a string,
+////            b string
+////    from @"c:\excel\1001464881_1001464795_2016-01-13_10.00.01.689__1900.xml"
+////    using new usqlcsharpproject1.xmldomextractorns(
+////          rowpath : "lics:rec/lics:ftr",
+////          columnpaths : new sql.map<string, string>{ {"@id", "a"},{"lics:ftrs","b"} },
+////          namespaces : "lics=http://bentley.com/selectserver/webservices/"
+////          );
+////
+////output @e
+////to @"c:\excel\output.csv"
+////using outputters.csv(quoting : false);
 
 //////////@e =
 //////////    EXTRACT a string,
@@ -64,20 +64,88 @@ REFERENCE ASSEMBLY [USQLCSharpProject1];
 //////////USING Outputters.Csv(quoting : false);
 
 
-@e =
-    EXTRACT a string,
-            b string
+//////////////////@e =
+//////////////////    EXTRACT a string,
+//////////////////            b string
+//////////////////    FROM @"C:\excel\1001464881_1001464795_2016-01-13_10.00.01.689__1900.xml"
+//////////////////    USING new USQLCSharpProject1.XmlDomExtractorNs(
+//////////////////                                                      
+//////////////////          rowPath : "//root:ud",
+//////////////////          columnPaths : new SQL.MAP<string, string>{ {"@name", "a"},{"../../../../@sTime", "b"} },
+//////////////////          namespaces : "root=http://bentley.com/selectserver/webservices/"
+//////////////////          );
+//////////////////
+//////////////////OUTPUT @e
+//////////////////TO @"C:\excel\output.csv"
+//////////////////USING Outputters.Csv(quoting : false);
+
+//
+//@e =
+//    EXTRACT a string,
+//            b string,
+//            c string,
+//            d string,
+//            e string,
+//            f string,
+//            g string,
+//            value string
+//    FROM @"C:\excel\1001464881_1001464795_2016-01-13_10.00.01.689__1900.xml"
+//    USING new USQLCSharpProject1.XmlDomExtractorNs(
+//                                                      
+//          rowPath : "//root:ud",
+//          columnPaths : new SQL.MAP<string, string>{ {"@name", "a"},{"@value", "value"},{"../../@id", "b"},{"../../@rtg", "c"},{"../../@fud", "d"},{"../../@fst", "e"},{"../../@fet", "f"},{"../../@ret", "g"} },
+//          namespaces : "root=http://bentley.com/selectserver/webservices/"
+//          );
+
+
+@f =
+    EXTRACT 
+            b string,
+            c string,
+            d string,
+            e string,
+            f string,
+            g string,
+            a string,
+            value string
     FROM @"C:\excel\1001464881_1001464795_2016-01-13_10.00.01.689__1900.xml"
     USING new USQLCSharpProject1.XmlDomExtractorNs(
-                                                      
-          rowPath : "root:lics/*",
-          columnPaths : new SQL.MAP<string, string>{ {"@id", "a"} },
+            //rowPath: "*[local-name() = 'root:ftr' and not(descendant::*[local-name() = 'root:uds'])]",                                          
+          rowPath : "//root:ftr[count(*)<1]",
+          columnPaths : new SQL.MAP<string, string>{ {"@id", "b"},{"@rtg", "c"},{"@fud", "d"},{"@fst", "e"},{"@fet", "f"},{"@ret", "g"} },
           namespaces : "root=http://bentley.com/selectserver/webservices/"
           );
 
-OUTPUT @e
-TO @"C:\excel\output.csv"
+//@join =
+//    SELECT uds.a,
+//           uds.value,
+//           uds.b,
+//           uds.c,
+//           uds.d,
+//           uds.e,
+//           uds.f,
+//           uds.g
+//    FROM @e AS uds
+//    UNION ALL
+//    SELECT 
+//    ftrs.a,ftrs.value,
+//           ftrs.b,
+//           ftrs.c,
+//           ftrs.d,
+//           ftrs.e,
+//           ftrs.f,
+//           ftrs.g
+//    FROM @f AS ftrs;
+//
+
+
+OUTPUT @f
+TO @"C:\excel\_output-f.csv"
 USING Outputters.Csv(quoting : false);
+
+
+
+
 
 /*
 <lics lVer="2.0" pID="1900" aKey="165J322M8FLC8SF" cTime="2016-01-13T10:00" gDel="0" country="US" fStr="">
